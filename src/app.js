@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 
 const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/authRoute');
 const errorHandler = require('./middleware/errorMiddleware')
 
 const app = express();
@@ -20,6 +21,7 @@ app.get("/",(req,res)=>{
 
 //user-routes
 app.use("/api/users",userRoutes);
+app.use("/api/auth",authRoutes);
 
 //404  routes
 app.use((req,res)=>{

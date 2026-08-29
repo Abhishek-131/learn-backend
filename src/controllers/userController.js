@@ -110,6 +110,15 @@ const deleteUser = asyncHandler(async (req, res) => {
     });
 });
 
+const deleteAllUsers = asyncHandler(async (req,res)=>{
+    const deleteAll = await User.deleteMany({});
+    res.status(200).json({
+        success: true,
+        message:"All User deleted Successfully",
+        deleteCount: deleteAll.deleteCount,
+    })
+})
+
 module.exports = {
     createUser,
     getUsers,
@@ -117,4 +126,5 @@ module.exports = {
     updateUser,
     updateUserPartially,
     deleteUser,
+    deleteAllUsers
 };
