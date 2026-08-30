@@ -6,7 +6,9 @@ const { createUser,
     updateUserPartially,
     deleteUser,
     deleteAllUsers
-} = require('../controllers/userController')
+} = require('../controllers/userController');
+const protect = require('../middleware/authMiddleware');
+const authorize = require('../middleware/roleMiddleware');
 
 const router = express.Router();
 
@@ -17,7 +19,8 @@ router.get("/:id",getSingleUser);
 router.put("/:id",updateUser);
 router.patch("/:id",updateUserPartially);
 router.delete("/:id",deleteUser);
-router.delete("/",deleteAllUsers);
+//only admin can delete all users
+router.delete("/",protect,authorize("admin"), deleteAllUsers);
 
 
 module.exports = router;

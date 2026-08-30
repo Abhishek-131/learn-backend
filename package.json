@@ -8,10 +8,15 @@
     "mongoose": "^9.9.3"
   },
   "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint . --fix",
     "start": "node server.js",
     "dev": " nodemon server.js"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
     "nodemon": "^3.1.14"
   },
   "name": "backend-crud",

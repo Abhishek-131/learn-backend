@@ -1,5 +1,5 @@
-const express = require('express')
-const cors = require('cors')
+const express = require('express');
+const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoute');
@@ -28,8 +28,8 @@ app.use((req,res)=>{
     rse.status(404).json({
         success:false,
         message:"404 NOT FOUND...",
-    })
-})
+    });
+});
 
 //Error Middleware
 app.use(errorHandler);

@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema(
       min: [1, "Age must be greater than 0"],
       max: [120, "Please provide a valid age"],
     },
+    role:{
+      type: String,
+      role: ["user","admin"],
+      default: "user",
+    },
   },
   {
     timestamps: true,
