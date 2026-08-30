@@ -27,10 +27,27 @@ const createUser = asyncHandler(async (req, res) => {
 
 //GET ALL USERS
 const getUsers = asyncHandler(async (req, res) => {
-    const users = await User.find();
-    if (users.length === 0) {
-        throw new AppError("No User", 400);
+    const {search, role, sort} = req.query;
+    const filter = {};
+    //seach
+    if(search){
+        filter.$or =[
+           {name: { $regex: search, $options: "i"}},
+           {email : {$regex: search, $options: "i"}},
+        ];
     }
+    //filter
+    if(role){
+        filter.role = role;
+    }
+
+    let query = User.find(filter);
+    //sort
+    if(sort){
+        query = query.sort(sort);
+    }
+    const users = await query;
+
     res.status(200).json({
         success: true,
         count: users.length,
