@@ -27,7 +27,7 @@ const createUser = asyncHandler(async (req, res) => {
 
 //GET ALL USERS
 const getUsers = asyncHandler(async (req, res) => {
-    const {search, role, sort} = req.query;
+    const {search, role, sort ="-createdAt", page=1, limit=10} = req.query;
     const filter = {};
     //seach
     if(search){
@@ -41,18 +41,39 @@ const getUsers = asyncHandler(async (req, res) => {
         filter.role = role;
     }
 
-    let query = User.find(filter);
-    //sort
-    if(sort){
-        query = query.sort(sort);
-    }
-    const users = await query;
+  const pageNumber = Math.max(Number(page), 1);
+  const limitNumber = Math.min(
+    Math.max(Number(limit), 1),
+    100
+  );
 
-    res.status(200).json({
-        success: true,
-        count: users.length,
-        data: users,
-    });
+  const skip = (pageNumber - 1) * limitNumber;
+
+  const [users, totalUsers] = await Promise.all([
+    User.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limitNumber),
+
+    User.countDocuments(filter)
+  ]);
+
+  const totalPages = Math.ceil(
+    totalUsers / limitNumber
+  );
+
+  res.status(200).json({
+    success: true,
+
+    pagination: {
+      currentPage: pageNumber,
+      totalPages,
+      totalUsers,
+      limit: limitNumber,
+    },
+
+    data: users,
+  });
 });
 
 // Get User By Id
