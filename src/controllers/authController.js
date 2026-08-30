@@ -18,6 +18,7 @@ const register = asyncHandler(async (req, res) => {
   }
 
   const existingUser = await User.findOne({ email });
+  console.log("user exits",existingUser);
 
   if (existingUser) {
     throw new AppError("Email already exists", 409);
@@ -34,6 +35,7 @@ const register = asyncHandler(async (req, res) => {
     password: hashedPassword,
     age,
   });
+  console.log("user",user);
 
   res.status(201).json({
     success: true,
@@ -46,7 +48,6 @@ const register = asyncHandler(async (req, res) => {
     },
   });
 });
-
 
 // LOGIN
 const login = asyncHandler(async (req, res) => {
@@ -99,8 +100,16 @@ const login = asyncHandler(async (req, res) => {
   });
 });
 
+const getMe = asyncHandler(async (req,res)=>{
+  res.status(200).json({
+    success:true,
+    data: req.user
+  });
+});
+
 
 module.exports = {
   register,
   login,
+  getMe,
 };
