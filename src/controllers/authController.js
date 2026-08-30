@@ -18,7 +18,6 @@ const register = asyncHandler(async (req, res) => {
   }
 
   const existingUser = await User.findOne({ email });
-  console.log("user exits",existingUser);
 
   if (existingUser) {
     throw new AppError("Email already exists", 409);
@@ -35,7 +34,6 @@ const register = asyncHandler(async (req, res) => {
     password: hashedPassword,
     age,
   });
-  console.log("user",user);
 
   res.status(201).json({
     success: true,
