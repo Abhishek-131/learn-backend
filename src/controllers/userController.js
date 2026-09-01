@@ -157,6 +157,42 @@ const deleteAllUsers = asyncHandler(async (req,res)=>{
     })
 })
 
+const uploadProfileImage = asyncHandler(
+  async (req, res) => {
+    if (!req.file) {
+      throw new AppError(
+        "Please upload an image",
+        400
+      );
+    }
+
+    const imagePath = `/uploads/profiles/${req.file.filename}`;
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        profileImage: imagePath,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Profile image uploaded successfully",
+      data: {
+        profileImage: user.profileImage,
+      },
+    });
+  }
+);
+
 module.exports = {
     createUser,
     getUsers,
@@ -164,5 +200,6 @@ module.exports = {
     updateUser,
     updateUserPartially,
     deleteUser,
-    deleteAllUsers
+    deleteAllUsers,
+    uploadProfileImage
 };

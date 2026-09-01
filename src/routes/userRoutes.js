@@ -5,9 +5,11 @@ const { createUser,
     updateUser,  
     updateUserPartially,
     deleteUser,
-    deleteAllUsers
+    deleteAllUsers,
+    uploadProfileImage
 } = require('../controllers/userController');
 const protect = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware');
 const authorize = require('../middleware/roleMiddleware');
 
 const router = express.Router();
@@ -21,6 +23,8 @@ router.patch("/:id",updateUserPartially);
 router.delete("/:id",deleteUser);
 //only admin can delete all users
 router.delete("/",protect,authorize("admin"), deleteAllUsers);
+//upload image-profile
+router.post("/profile-image", protect, upload.single("image"), uploadProfileImage);
 
 
 module.exports = router;
