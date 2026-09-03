@@ -1,4 +1,4 @@
-const errorHandler = (err, req, res)=>{
+const errorHandler = (err, req, res, next)=>{
         
     let statusCode = err.statusCode || 500;
     let message = err.message || "Internal server Error";
@@ -23,6 +23,17 @@ const errorHandler = (err, req, res)=>{
         const field = Object.keys(err.keyValue)[0];
         message = `${field} already exist`;
     }
+
+     if (err.name === "JsonWebTokenError") {
+       statusCode = 401;
+       message = "Invalid token";
+     }
+
+     if (err.name === "TokenExpiredError") {
+       statusCode = 401;
+       message = "Token expired";
+     }
+
     res.status(statusCode).json({
         success:false,
         message,
